@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Valorización de Oro</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+<div class="container">
+    <div class="content-logo">
+    <a href="#"><img class="logo-image" src="imagenes/Imagotipo OROEXPRESS 2024_sin r_B.png" alt=""></a>
+    </div>
+    <h2>Calculadora de Valorización del Oro</h2>
+    <p>Ingresa el precio actual y los porcentajes de crecimiento del oro.</p>
+
+    <div class="input-group">
+        <label for="currentPrice">Precio actual del oro por gramo (COP):</label>
+        <input type="number" id="currentPrice" placeholder="Ej: 441758.93">
+    </div>
+    
+    <div class="input-group">
+        <label for="fiveYearPercentage">Porcentaje de valorización en 5 años (%):</label>
+        <input type="number" id="fiveYearPercentage" placeholder="Ej: 86.01">
+    </div>
+
+    <div class="input-group">
+        <label for="tenYearPercentage">Porcentaje de valorización en 10 años (%):</label>
+        <input type="number" id="tenYearPercentage" placeholder="Ej: 330.00">
+    </div>
+
+    <button onclick="performCalculation()">Calcular Valorización</button>
+
+    <div id="results" class="result-box" style="display: none;">
+        <h3>Resultados:</h3>
+
+        <p>Precio actual del gramo de oro: <span class="current-value" id="displayCurrentPrice"></span></p>
+
+        <div class="period-section">
+            <h4>Análisis de 5 Años:</h4>
+            <p>Precio aproximado del gramo de oro hace 5 años: <span class="five-year-value" id="pastPrice5"></span></p>
+            <p>Valorización aproximada en dinero (COP): <span class="five-year-value" id="appreciationAmount5"></span></p>
+            <p>Valorización en porcentaje (%): <span class="five-year-value" id="appreciationPercentage5"></span></p>
+        </div>
+
+        <div class="period-section">
+            <h4>Análisis de 10 Años:</h4>
+            <p>Precio aproximado del gramo de oro hace 10 años: <span class="ten-year-value" id="pastPrice10"></span></p>
+            <p>Valorización aproximada en dinero (COP): <span class="ten-year-value" id="appreciationAmount10"></span></p>
+            <p>Valorización en porcentaje (%): <span class="ten-year-value" id="appreciationPercentage10"></span></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function performCalculation() {
+        // Obtenemos los valores ingresados por el usuario
+        const currentPrice = parseFloat(document.getElementById('currentPrice').value);
+        const fiveYearPercentage = parseFloat(document.getElementById('fiveYearPercentage').value);
+        const tenYearPercentage = parseFloat(document.getElementById('tenYearPercentage').value);
+
+        // Validamos que los campos no estén vacíos
+        if (isNaN(currentPrice) || isNaN(fiveYearPercentage) || isNaN(tenYearPercentage)) {
+            alert('Por favor, ingresa todos los valores para realizar los cálculos.');
+            return;
+        }
+
+        // --- Cálculos para el periodo de 5 años ---
+        const fiveYearDecimal = fiveYearPercentage / 100;
+        const priceFiveYearsAgo = currentPrice / (1 + fiveYearDecimal);
+        const absoluteIncrease5 = currentPrice - priceFiveYearsAgo;
+
+        // --- Cálculos para el periodo de 10 años ---
+        const tenYearDecimal = tenYearPercentage / 100;
+        const priceTenYearsAgo = currentPrice / (1 + tenYearDecimal);
+        const absoluteIncrease10 = currentPrice - priceTenYearsAgo;
+
+// --- Mostramos los resultados en la página ---
+document.getElementById('displayCurrentPrice').textContent = currentPrice.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' COP';
+
+// Sección de 5 años
+document.getElementById('pastPrice5').textContent = priceFiveYearsAgo.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' COP';
+document.getElementById('appreciationAmount5').textContent = absoluteIncrease5.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' COP';
+document.getElementById('appreciationPercentage5').textContent = fiveYearPercentage.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' %';
+
+// Sección de 10 años
+document.getElementById('pastPrice10').textContent = priceTenYearsAgo.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' COP';
+document.getElementById('appreciationAmount10').textContent = absoluteIncrease10.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' COP';
+document.getElementById('appreciationPercentage10').textContent = tenYearPercentage.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' %';
+        
+        // Hacemos visible el cuadro de resultados
+        document.getElementById('results').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
